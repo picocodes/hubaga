@@ -1,0 +1,334 @@
+/* Hide coupon visibility settings on coupon pages */
+.post-type-h_coupon .misc-pub-visibility{
+	display: none;
+}
+
+.hubaga-action-btn {
+	font-size: 28px;
+	padding: 0 0.8rem;
+	padding-bottom: 4px;
+	background-color: #ff4081;
+	color: #fff;
+	border: none;
+	border-radius: 2px;
+	display: inline-block;
+}
+
+@media only screen and (min-width: 601px){
+.hubaga-filters {
+	background: rgba(238, 235, 235, 0.06);
+	padding-top: 1em;
+}
+}
+
+.report-card-wrapper{
+	margin-bottom: 1em;
+}
+.hubaga-report-card-aggregate{
+	padding: 1em;
+	text-align: center;
+}
+
+.card-num {
+	display: block;
+	font-size: 25px;
+	margin-bottom: 10px;
+}
+
+.hubaga-flotchart-placeholder{
+	width: 100%;
+	height: 400px;
+}
+
+#hubaga_reports{
+	padding: 1em;
+}
+
+.hubaga-filter-btn{
+	width: 100%;
+}
+.btn-right{
+	float: right;
+}
+
+.hubaga-block{
+	display: block;
+}
+
+.hubaga-unstyled{
+	text-decoration: none;
+	list-style-type: none;
+}
+
+.hubaga-price-more{
+	max-width: 320px;
+	padding: 1em;
+	margin-left: 0;
+	margin-top: 2em;
+	position: relative;
+}
+
+.hubaga-price-more::after {
+	content: '';
+	display: block;
+	position: absolute;
+	top: -2.6em;
+	width: 0;
+	height: 0;
+	border: 16px solid;
+	left: 10%;
+	border-color: transparent transparent rgba(0, 0, 0, 0.2) transparent;
+}
+
+.list-group.elementa-dropdown-content{
+	margin-top: 0;
+}
+
+.elementa .list-group-inner-item {
+	border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+	padding-bottom: 5px;
+	padding-top: 1em;
+}
+
+.stream-price, .hubaga-stream-price{
+	padding: 5px;
+	color: #fff;
+}
+
+.hubaga-stream-price.green{background-color:#4CAF50!important}
+.hubaga-stream-price.orange{background-color:#ff9800!important}
+.hubaga-stream-price.black{background-color:#000!important}
+.hubaga-stream-price.red{background-color:#F44336!important}
+.hubaga-stream-price.teal{background-color:#009688!important}
+.hubaga-stream-price.light-blue{background-color:#03a9f4!important}
+
+.hubaga-price-muted {
+	color: #888;
+	font-weight: bold;
+	border: 1px solid #aaa;
+	padding: 5px;
+}
+
+.hubaga-muted {
+	color: #888;
+	font-size: 1.2em;
+	margin-top: 0;
+	font-weight: bold;
+}
+
+#hubaga_order_details .handlediv,
+#hubaga_order_details .hndle,
+.post-type-h_order #minor-publishing-actions,
+.post-type-h_order #visibility {
+display: none;
+}
+
+.hubaga-order-notes:after{
+	content:"";
+	display:table;
+	clear:both
+}
+
+.hubaga-note{
+	padding: 0.4em;
+	border-radius: 5px;
+	width: 80%;
+	position: relative;
+}
+
+.hubaga-note:nth-child(even){
+	background: #009688;
+	border: 1px solid #fff;
+	color: #fff;
+	float: right;
+}
+
+.hubaga-note:nth-child(odd){
+	background: #fff;
+	border: 1px solid rgba(35, 40, 45, 0.23);
+	float: left;
+}
+
+.hubaga-overlay-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.53);
+}
+
+.hubaga-loader {
+  display: block;
+  position: relative;
+  left: 50%;
+  top: 50%;
+  width: 150px;
+  height: 150px;
+  margin: -75px 0 0 -75px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: #3498db;
+  -webkit-animation: hspin 2s linear infinite;
+  animation: hspin 2s linear infinite;
+  z-index: 1001;
+}
+
+.hubaga-loader:before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: #e74c3c;
+  -webkit-animation: hspin 3s linear infinite;
+  animation: hspin 3s linear infinite;
+}
+
+.hubaga-loader:after {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: #f9c922;
+  -webkit-animation: hspin 1.5s linear infinite;
+  animation: hspin 1.5s linear infinite;
+}
+
+/*----------------------------------------
+    Animations
+------------------------------------------*/
+
+@-webkit-keyframes hspin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes hspin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+.hubaga-extensions-template{
+	max-width: 620px;
+}
+
+.hubaga-hubaga-product-card {
+	box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+	padding: 0;
+	max-width: 100%;
+	width: 300px;
+	position: relative;
+	min-height: 200px;
+	margin: auto;
+	margin-bottom: 1em;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.hubaga-hubaga-product-card * {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.hubaga-hubaga-product-card:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+.hubaga-hubaga-product-card-header {
+	min-height: 200px;
+	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+}
+
+.hubaga-hubaga-product-card-body {
+	padding: 1em;
+}
+
+.hubaga-hubaga-card-price {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	border-radius: 50%;
+	border: 2px solid #fff;
+	width: 64px;
+	height: 64px;
+	padding-top: 1em;
+	color: #ff5722;
+	background: #fff;
+	font-weight: bold;
+	font-size: 15px;
+	padding-left: 6px;
+}
+
+.hubaga-hubaga-product-card h2 {
+	font-size: 1.62rem;
+	margin: 1.78rem 0 1.424rem 0;
+	font-weight: normal;
+	line-height: 1.5;
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.hubaga-hubaga-product-card p{
+	font-size: 1rem;
+}
+
+@media only screen and (min-width: 620px) {
+
+	.hubaga-hubaga-product-card {
+		width: 100% !important;
+		min-width: 100% !important;
+		float: none;
+	}
+
+	.hubaga-hubaga-product-card-header {
+		width: 30% !important;
+		float: left !important;
+		height: 100% !important;
+	}
+
+	.hubaga-hubaga-product-card-body {
+		width: 70% !important;
+		float: right !important;
+		height: 100% !important;
+	}
+
+	.hubaga-hubaga-buy {
+		position: absolute !important;
+		bottom: 5px !important;
+		right: 0 !important;
+		width: 240px !important;
+	}
+
+}
+
+#hubaga_product_editor{
+	max-width: 920px;
+}
