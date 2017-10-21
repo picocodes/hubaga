@@ -2,12 +2,12 @@
 /**
  * Plugin Name: Hubaga
  * Plugin URI: https://hubaga.com/
- * Description: A lightweight plugin that allows you to easily sell your digital products. Fast.
- * Version: 1.0.0
+ * Description: Use this light-weight plugin to sell your software products.
+ * Version: 1.0.1
  * Author: Hubaga
  * Author URI: https://hubaga.com
  * Requires at least: 4.4
- * Tested up to: 4.7
+ * Tested up to: 4.9
  *
  * Text Domain: hubaga
  * Domain Path: /languages/
