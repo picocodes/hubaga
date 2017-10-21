@@ -103,12 +103,6 @@ class H_Admin {
 			'enqeue' 	=> array( $elementa, 'enque_select'),
 		) );
 
-		//Extensions
-		$elementa->register_element( 'extension', array(
-			'callback' 	=> array( $this, 'render_element'),
-			'render_default_markup' => false,
-		) );
-
 		//Editor
 		$elementa->register_element( 'editor', array(
 			'callback' 	=> array( $this, 'render_element'),
