@@ -248,17 +248,6 @@ class H_Admin {
 			array( $this, 'render_status' )
 		);
 
-		//Get extensions page
-		$extensions = add_submenu_page(
-			$product_slug,
-			esc_html__( 'Extensions', 'hubaga' ),
-			esc_html__( 'Extensions', 'hubaga' ),
-			'manage_options',
-			'hubaga-extensions',
-			array( $this, 'render_extensions' )
-		);
-		hubaga_elementa('hubaga_extensions')->hook_suffix = $extensions;
-
 		//Tell Elementa to load on the post edit screen
 		$hook = ( isset($_GET['post']) ) ? 'post.php':'post-new.php';
 		hubaga_elementa('hubaga_product_details')->hook_suffix = $hook;
@@ -340,26 +329,6 @@ class H_Admin {
 		if( current_user_can( 'manage_options' ) ){
 			$reports = new H_Report();
 			$reports->output();
-		}
-
-	}
-
-	/**
-	 * Renders the extensions showcase page
-	 *
-	 * @since Hubaga 1.0.0
-	 */
-	public function render_extensions() {
-
-		if( current_user_can( 'manage_options' ) ){
-			$extensions 	= require $this->admin_dir . 'extensions.php';
-			foreach( $extensions as $id => $args ) {
-				$args['id'] 		= $id;
-				$args['type'] 		= 'extension';
-				hubaga_add_option( $args, 'hubaga_extensions' );
-			}
-			hubaga_elementa( 'hubaga_extensions' )->set_template( $this->admin_dir . 'views/extensions-template.php' );
-			hubaga_elementa( 'hubaga_extensions' )->render();
 		}
 
 	}
@@ -483,9 +452,7 @@ class H_Admin {
 
 		if ( hubaga()->basename  == $file ) {
 			$row_meta = array(
-				'docs'    		=> '<a href="' . esc_url( 'https://hubaga.com/docs/hubaga/' ) . '" aria-label="' . esc_attr__( 'View Hubaga documentation', 'hubaga' ) . '">' . esc_html__( 'Docs', 'hubaga' ) . '</a>',
-				'extensions' 	=> '<a href="' . esc_url(  'https://hubaga.com/extensions/' ) . '" aria-label="' . esc_attr__( 'View Hubaga API docs', 'hubaga' ) . '">' . esc_html__( 'Extensions', 'hubaga' ) . '</a>',
-				'support' 		=> '<a href="' . esc_url(  'https://hubaga.com/support/'  ) . '" aria-label="' . esc_attr__( 'Visit premium customer support', 'hubaga' ) . '">' . esc_html__( 'Premium support', 'hubaga' ) . '</a>',
+				'support' 		=> '<a href="' . esc_url(  'https://hubaga.freshdesk.com/'  ) . '" aria-label="' . esc_attr__( 'Visit premium customer support', 'hubaga' ) . '">' . esc_html__( 'Premium support', 'hubaga' ) . '</a>',
 			);
 
 			return array_merge( $links, $row_meta );
