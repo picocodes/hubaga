@@ -2,8 +2,23 @@
 
 A WordPress eCommerce plugin for developers. It is lightweight and simple to use. https://hubaga.com
 
-Checkout a sample checkout process.
+Click the image below to view a sample checkout process.
+
 [![Sample checkout process](https://img.youtube.com/vi/AVAQwehfQ70/0.jpg)](https://www.youtube.com/watch?v=AVAQwehfQ70)
+
+## Screenshots
+
+![Sample product card](https://github.com/picocodes/hubaga/raw/master/assets/images/screenshot-1.png)
+*You can also display a buy button instead of a product card.*
+
+![Our single field checkout process](https://github.com/picocodes/hubaga/raw/master/assets/images/screenshot-2.png)
+*Hubaga maximizes conversion rates by making the checkout process as short as possible.*
+
+![Instacheck](https://github.com/picocodes/hubaga/raw/master/assets/images/screenshot-3.png)
+*Instacheck displays the checkout process without page loads thereby speeding the whole process.*
+
+![Hubaga comes with a comprehensive earnings report](https://github.com/picocodes/hubaga/raw/master/assets/images/screenshot-8.png)
+*You can filter your reports based on dates, browsers and plartforms.*
 
 ## Getting Started
 
