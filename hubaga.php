@@ -3,7 +3,7 @@
  * Plugin Name: Hubaga
  * Plugin URI: https://hubaga.com/
  * Description: Use this light-weight plugin to sell your software products.
- * Version: 1.0.1
+ * Version: 1.0.3
  * Author: Hubaga
  * Author URI: https://hubaga.com
  * Requires at least: 4.4
