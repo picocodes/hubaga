@@ -30,7 +30,7 @@ Before you can install Hubaga; you will need a WordPress website or blog. [Learn
 
 ### Installing
 
-Start by [downloading the latest release](https://github.com/picocodes/hubaga/releases) of Hubaga.
+Start by [downloading the latest release](https://downloads.wordpress.org/plugin/hubaga.zip) of Hubaga.
 
 Next; log into your WordPress admin dashboard and click on plugins > New > Upload then upload the the source code that you just downloaded.
 
