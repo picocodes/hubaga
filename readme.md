@@ -52,5 +52,5 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## License
 
-This project is licensed under the GPL3 License - see the [license.txt](LICENSE.md) file for details
+This project is licensed under the GPL3 License - see the [license.txt](license.txt) file for details
 
