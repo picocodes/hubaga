@@ -2,6 +2,8 @@
 
 A WordPress eCommerce plugin for developers. It is lightweight and simple to use. https://hubaga.com
 
+Looking for a wordPress search plugin? Checkout https://ajaxlivesearch.xyz
+
 Click the image below to view a sample checkout process.
 
 [![Sample checkout process](https://img.youtube.com/vi/AVAQwehfQ70/0.jpg)](https://www.youtube.com/watch?v=AVAQwehfQ70)
