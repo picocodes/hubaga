@@ -1,8 +1,8 @@
 # Hubaga
 
-A WordPress eCommerce plugin for developers. It is lightweight and simple to use. https://hubaga.com
+A WordPress eCommerce plugin for developers. It is lightweight and simple to use.
 
-Looking for a wordPress search plugin? Checkout https://ajaxlivesearch.xyz
+Looking for a premium for wordPress search plugin? Check out https://ajaxlivesearch.xyz and in doing so you will also be supporting Hubaga.
 
 Click the image below to view a sample checkout process.
 
