@@ -53,6 +53,51 @@ function hubaga_add_option( $args, $id = 'hubaga' ){
 	hubaga()->Elementa( $id )->queue_control( $args );
 }
 
+
+/**
+ * A helper function to check whether a given feature is enabled or not
+ *
+ *
+ * @since  1.0.4
+ * @return bool
+ */
+function hubaga_is_enabled( $feature, $id = 'hubaga' ){
+	return hubaga()->is_enabled( $feature, $id );
+}
+
+/**
+ * A helper function to check the product post type name
+ *
+ *
+ * @since  1.0.4
+ * @return bool
+ */
+function hubaga_get_product_post_type(){
+	return hubaga()->product_post_type;
+}
+
+/**
+ * A helper function to check the order post type
+ *
+ *
+ * @since  1.0.4
+ * @return bool
+ */
+function hubaga_get_order_post_type(){
+	return hubaga()->order_post_type;
+}
+
+/**
+ * A helper function to check coupon post type
+ *
+ *
+ * @since  1.0.4
+ * @return bool
+ */
+function hubaga_get_coupon_post_type(){
+	return hubaga()->coupon_post_type;
+}
+
 /**
  * A helper function to check whether this is a test store or not
  *
@@ -61,7 +106,7 @@ function hubaga_add_option( $args, $id = 'hubaga' ){
  * @return bool
  */
 function hubaga_is_sandbox(){
-	return hubaga_get_option( 'sandbox' );
+	return hubaga_is_enabled( 'sandbox' );
 }
 
 /**

@@ -3,7 +3,7 @@
  * Plugin Name: Hubaga
  * Plugin URI: https://hubaga.com/
  * Description: Use this light-weight plugin to sell your software products.
- * Version: 1.0.3
+ * Version: 1.0.4
  * Author: Hubaga
  * Author URI: https://hubaga.com
  * Requires at least: 4.4
@@ -115,10 +115,7 @@ final class Hubaga {
 	private function __construct() {
 
 		// Initiate Hubaga after WordPress initiates
-		add_action( 'init', array( $this, 'init' ), 0 );
-
-		//Run installation on activation
-		register_activation_hook( __FILE__, array( $this, 'install' ) );
+		add_action( 'plugins_loaded', array( $this, 'init' ) );
 
 		/**
 		 * Fires after Hubaga is loaded
@@ -153,8 +150,11 @@ final class Hubaga {
 		//Setup Hubaga globals
 		$this->setup_globals();
 
-		//Load required files
+		//Load core files
 		$this->includes();
+
+		//Load optional files
+		$this->include_optional();
 
 		//Initiate the admin class
 		$this->admin = new H_Admin();
@@ -214,7 +214,7 @@ final class Hubaga {
 	public function setup_globals() {
 
 		// Versions
-		$this->version    = '1.0.0';
+		$this->version    = '1.0.4';
 		$this->db_version = '100';
 
 		// Post type identifiers
@@ -270,10 +270,6 @@ final class Hubaga {
 		require_once $this->includes_path . 'customers/functions.php';
 		require_once $this->includes_path . 'customers/customer-class.php';
 
-		//Coupons
-		require_once $this->includes_path . 'coupons/functions.php';
-		require_once $this->includes_path . 'coupons/coupon-class.php';
-
 		//Notifications
 		require_once $this->includes_path . 'notifications.php';
 
@@ -298,6 +294,22 @@ final class Hubaga {
 		//Product widget
 		require_once $this->includes_path . 'product-widget.php';
 
+	}
+
+	/**
+	 * Loads core Hubaga files and plugins
+	 *
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 *
+	 */
+	protected function include_optional() {
+
+		//Coupons are optional
+		if( $this->is_enabled( 'coupons' )) {
+			require_once $this->includes_path . 'coupons.php';			
+		}
 	}
 
 	/**
@@ -413,6 +425,17 @@ final class Hubaga {
 		//Frontend css styles
 		wp_enqueue_style( 'hubaga_css', $this->plugin_url .  'assets/css/hubaga.css', array(), '1.0.0' );
 
+	}
+
+	/**
+	 * Checks whether or not the database should be upgraded
+	 *
+	 * @since 1.0.4
+	 * @access public
+	 *
+	 */
+	public function should_install() {
+		return get_option( 'hubaga_db_version', '0' ) == $this->db_version;
 	}
 
 	/**
