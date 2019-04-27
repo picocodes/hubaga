@@ -114,7 +114,7 @@ final class Hubaga {
 	 */
 	private function __construct() {
 
-		// Initiate Hubaga after WordPress initiates
+		//Init the plugin after all plugins have loaded
 		add_action( 'plugins_loaded', array( $this, 'init' ) );
 
 		/**
@@ -174,18 +174,14 @@ final class Hubaga {
 		//Initiate the shortcodes class
 		$this->shortcodes = new H_Shortcodes();
 
-		//Loads a list of currencies and currency symbols @see hubaga_get_currencies()
-		$this->currencies 		= apply_filters( 'hubaga_currencies', include( $this->includes_path . 'data/currencies.php' ) );
-		$this->currency_symbols = apply_filters( 'hubaga_currency_symbols', include( $this->includes_path . 'data/currency_symbols.php' ) );
-
-		//Register post statuses
-		$this->register_post_statuses();
+		// Register post statuses
+		add_action( 'init', array( $this, 'register_post_statuses' ) );
 
 		//Register post types after settings are loaded
 		add_action( 'hubaga_admin_init', array( $this, 'register_post_types' ), 3 );
 
 		// Set up localisation.
-		$this->load_plugin_textdomain();
+		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
 
 		//Enque necessary styles and scripts
 		add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ));
@@ -254,12 +250,10 @@ final class Hubaga {
         require_once $this->includes_path . 'functions.php';
 
 		//Products
-		require_once $this->includes_path . 'products/functions.php';
-		require_once $this->includes_path . 'products/product-class.php';
+		require_once $this->includes_path . 'products.php';
 
 		//Orders
-		require_once $this->includes_path . 'orders/functions.php';
-		require_once $this->includes_path . 'orders/order-class.php';
+		require_once $this->includes_path . 'orders.php';
 
 		//Checkout
 		require_once $this->includes_path . 'checkout/functions.php';
@@ -267,8 +261,7 @@ final class Hubaga {
 		require_once $this->includes_path . 'checkout/payments-class.php';
 
 		//Customers
-		require_once $this->includes_path . 'customers/functions.php';
-		require_once $this->includes_path . 'customers/customer-class.php';
+		require_once $this->includes_path . 'customers.php';
 
 		//Notifications
 		require_once $this->includes_path . 'notifications.php';
@@ -310,6 +303,19 @@ final class Hubaga {
 		if( $this->is_enabled( 'coupons' )) {
 			require_once $this->includes_path . 'coupons.php';			
 		}
+	}
+
+	/**
+	 * Checks whether a given feature is enabled
+	 *
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 *
+	 */
+	protected function is_enabled( $feature, $id = 'hubaga' ) {
+
+		return false;
 	}
 
 	/**
@@ -490,4 +496,4 @@ final class Hubaga {
 endif;
 
 //And off we GO!!!!!!!!
-Hubaga::instance();
+//Hubaga::instance();

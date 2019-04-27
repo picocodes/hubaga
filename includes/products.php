@@ -8,6 +8,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
+//Require the main product object
+require_once hubaga_get_includes_path( 'product-class.php' );
+
 /**
  * Retrieves a product by ID or object.
  *

@@ -8,6 +8,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
+//Require the main order object
+require_once hubaga_get_includes_path( 'order-class.php' );
+
 /**
  * Saves an order an existing order
  *

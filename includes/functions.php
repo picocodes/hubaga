@@ -66,28 +66,6 @@ function hubaga_is_enabled( $feature, $id = 'hubaga' ){
 }
 
 /**
- * A helper function to check the product post type name
- *
- *
- * @since  1.0.4
- * @return bool
- */
-function hubaga_get_product_post_type(){
-	return hubaga()->product_post_type;
-}
-
-/**
- * A helper function to check the order post type
- *
- *
- * @since  1.0.4
- * @return bool
- */
-function hubaga_get_order_post_type(){
-	return hubaga()->order_post_type;
-}
-
-/**
  * A helper function to check coupon post type
  *
  *
@@ -463,7 +441,7 @@ function hubaga_clean( $var ) {
  * @return string
  */
 function hubaga_get_currency() {
-	return hubaga_clean( hubaga_get_option( 'currency' ) );	
+	return hubaga_get_option( 'currency' );	
 }
 
 /**
@@ -472,7 +450,7 @@ function hubaga_get_currency() {
  * @return string
  */
 function hubaga_get_currencies() {
-	return hubaga()->currencies;
+	return apply_filters( 'hubaga_currencies', include( hubaga_get_includes_path( 'data/currencies.php' )));
 }
 
 /**
@@ -484,8 +462,7 @@ function hubaga_get_currency_symbol( $currency = false ) {
 	
 	( $currency ) || $currency = hubaga_get_currency();
 	$symbols = hubaga_get_currency_symbols();
-	$currency_symbol = isset( $symbols[ $currency ] ) ? $symbols[ $currency ] : '';
-	return apply_filters( 'hubaga_currency_symbol', $currency_symbol, $currency );
+	return isset( $symbols[ $currency ] ) ? $symbols[ $currency ] : '';
 	
 }
 
@@ -495,7 +472,7 @@ function hubaga_get_currency_symbol( $currency = false ) {
  * @return string
  */
 function hubaga_get_currency_symbols() {
-	return hubaga()->currency_symbols;
+	return apply_filters( 'hubaga_currency_symbols', include( $this->includes_path . 'data/currency_symbols.php' ) );
 }
 
 /**

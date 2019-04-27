@@ -8,6 +8,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
+//Require the main customer object
+require_once hubaga_get_includes_path( 'customer-class.php' );
+
 /**
  * Retrieves a given customer
  * @since 1.0.0

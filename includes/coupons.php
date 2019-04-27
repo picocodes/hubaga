@@ -8,6 +8,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
+//Require the main coupon object
+require_once hubaga_get_includes_path( 'coupon-class.php' );
+
 /**
  * Filters on data used in admin and frontend.
  */
