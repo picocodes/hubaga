@@ -48,20 +48,33 @@ class H_Admin {
 	 *
 	 */
 	public function __construct() {
-		add_action( 'hubaga_init', array( $this, 'init' ), 1 );
-	}
 
-	/**
-	 * The main Hubaga admin loader
-	 *
-	 * @since Hubaga 1.0.0
-	 *
-	 */
-	public function init() {
+		//Setup class globals
 		$this->setup_globals();
+
+		//Register custom elements
 		$this->register_custom_elements();
-		$this->includes();
-		$this->setup_actions();
+
+		//Load user settigns
+		$this->load_settings();
+
+		//Setup hooks
+		add_action( 'admin_menu',              	   		array( $this, 'admin_menus'                		));
+		add_action( 'admin_enqueue_scripts',       		array( $this, 'enqueue_styles'             		));
+		add_action( 'admin_enqueue_scripts',       		array( $this, 'enqueue_scripts'            		));
+		add_action( 'wp_dashboard_setup',          		array( $this, 'dashboard_widget_right_now' 		));
+		add_filter( 'plugin_action_links', 				array( $this, 'modify_plugin_action_links' ), 10, 2 );
+		add_filter( 'plugin_row_meta', 					array( $this, 'modify_plugin_row_meta' ), 10, 2 	);
+
+		//Maybe load admin specific files
+		if ( is_admin() ) {
+			//The metaboxes used on add/edit post screen
+			require_once( $this->admin_dir . 'metaboxes.php'     );
+			$this->metaboxes = new H_Metaboxes();
+
+			//Order reports
+			require_once( $this->admin_dir . 'reports.php' );
+		}
 
 		/**
 		 * Fires after Hubaga admin initializes
@@ -85,6 +98,25 @@ class H_Admin {
 		$this->images_url = $this->admin_url   	. 'assets/images/'; // Admin images URL
 		$this->css_url    = $this->admin_url   	. 'assets/css/'; // Admin css URL
 		$this->js_url     = $this->admin_url   	. 'assets/js/'; // Admin js URL
+
+	}
+	
+	/**
+	 * Loads user settings
+	 *
+	 * @since Hubaga 1.0.4
+	 *
+	 */
+	public function load_settings() {
+
+		//Plugin settings
+		$settings 	= include $this->admin_dir . 'settings.php';
+		$settings 	= apply_filters( 'hubaga_setting_fields', $settings );
+		foreach( $settings as $id => $args ) {
+			$args['id'] 		= $id;
+			do_action( "hubaga_settings_before_add_{$id}" );
+			hubaga_add_option( $args );
+		}
 
 	}
 
@@ -143,57 +175,6 @@ class H_Admin {
 	public function render_element( $args ) {
 		if ( isset ( $args['type'] ) )
 			include $this->admin_dir . "elements/{$args['type']}.php";
-	}
-
-	/**
-	 * Include required files
-	 *
-	 * @since Hubaga 1.0.0
-	 * @access private
-	 */
-	private function includes() {
-
-		if ( is_admin() ) {
-			//The metaboxes used on add/edit post screen
-			require_once( $this->admin_dir . 'metaboxes.php'     );
-			$this->metaboxes = new H_Metaboxes();
-
-			//Order reports
-			require_once( $this->admin_dir . 'reports.php' );
-		}
-
-
-		//Plugin settings
-		$settings 	= include $this->admin_dir . 'settings.php';
-		$settings 	= apply_filters( 'hubaga_setting_fields', $settings );
-
-		foreach( $settings as $id => $args ) {
-
-			$args['id'] 		= $id;
-			do_action( "hubaga_settings_before_add_{$id}" );
-			hubaga_add_option( $args );
-
-		}
-
-	}
-
-	/**
-	 * Setup the admin hooks, actions and filters
-	 *
-	 * @since Hubaga 1.0.0
-	 * @access private
-	 *
-	 * @uses add_action() To add various actions
-	 * @uses add_filter() To add various filters
-	 */
-	private function setup_actions() {
-
-		add_action( 'admin_menu',              	   		array( $this, 'admin_menus'                		));
-		add_action( 'admin_enqueue_scripts',       		array( $this, 'enqueue_styles'             		));
-		add_action( 'admin_enqueue_scripts',       		array( $this, 'enqueue_scripts'            		));
-		add_action( 'wp_dashboard_setup',          		array( $this, 'dashboard_widget_right_now' 		));
-		add_filter( 'plugin_action_links', 				array( $this, 'modify_plugin_action_links' ), 10, 2 );
-		add_filter( 'plugin_row_meta', 					array( $this, 'modify_plugin_row_meta' ), 10, 2 	);
 	}
 
 	/**
@@ -347,7 +328,7 @@ class H_Admin {
 	}
 
 	/**
-	 * Enques chartist when rendering the reports page
+	 * Enques flot charts when rendering the reports page
 	 *
 	 * @since Hubaga 1.0.0
 	 */
@@ -364,11 +345,7 @@ class H_Admin {
 	 * @since Hubaga 1.0.0
 	 */
 	public function dashboard_widget_right_now() {
-
-		if( current_user_can( 'manage_options' ) ){
-			wp_add_dashboard_widget( 'hubaga_sales_stream', 'Hubaga', array( $this, 'display_dashboard_widget' ) );
-		}
-
+		wp_add_dashboard_widget( 'hubaga_sales_stream', 'Hubaga', array( $this, 'display_dashboard_widget' ) );
 	}
 
 	/**
@@ -427,7 +404,7 @@ class H_Admin {
 	 */
 	public function modify_plugin_action_links( $links, $file ) {
 
-		if ( hubaga()->basename  == $file ) {
+		if ( hubaga_get_plugin_basename()  == $file ) {
 			$url 				= esc_url( hubaga_admin_settings_url() );
 			$attr				= esc_attr__( 'Settings', 'hubaga' );
 			$title				= esc_html__( 'Settings', 'hubaga' );
@@ -444,7 +421,7 @@ class H_Admin {
 	 */
 	public function modify_plugin_row_meta( $links, $file ) {
 
-		if ( hubaga()->basename  == $file ) {
+		if ( hubaga_get_plugin_basename()  == $file ) {
 			$row_meta = array(
 				'support' 		=> '<a href="' . esc_url(  'https://picocodes.freshdesk.com/'  ) . '" aria-label="' . esc_attr__( 'Visit premium customer support', 'hubaga' ) . '">' . esc_html__( 'Premium support', 'hubaga' ) . '</a>',
 			);

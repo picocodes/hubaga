@@ -58,7 +58,7 @@ class H_Metaboxes {
 		$this->coupon_post_type	 		= hubaga_get_coupon_post_type();
 		$this->order_post_type	 		= hubaga_get_order_post_type();
 		$this->orders_statuses	 		= hubaga_get_order_statuses();
-		$this->admin_dir				= hubaga()->admin->admin_dir;
+		$this->admin_dir				= hubaga_get_includes_path( 'admin' );
 	}
 
 	/**

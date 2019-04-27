@@ -53,18 +53,6 @@ function hubaga_add_option( $args, $id = 'hubaga' ){
 	hubaga()->Elementa( $id )->queue_control( $args );
 }
 
-
-/**
- * A helper function to check whether a given feature is enabled or not
- *
- *
- * @since  1.0.4
- * @return bool
- */
-function hubaga_is_enabled( $feature, $id = 'hubaga' ){
-	return hubaga()->is_enabled( $feature, $id );
-}
-
 /**
  * A helper function to check coupon post type
  *
@@ -84,7 +72,7 @@ function hubaga_get_coupon_post_type(){
  * @return bool
  */
 function hubaga_is_sandbox(){
-	return hubaga_is_enabled( 'sandbox' );
+	return hubaga_get_option( 'sandbox' );
 }
 
 /**
@@ -472,7 +460,7 @@ function hubaga_get_currency_symbol( $currency = false ) {
  * @return string
  */
 function hubaga_get_currency_symbols() {
-	return apply_filters( 'hubaga_currency_symbols', include( $this->includes_path . 'data/currency_symbols.php' ) );
+	return apply_filters( 'hubaga_currency_symbols', include( hubaga_get_includes_path( 'data/currency_symbols.php' )));
 }
 
 /**

@@ -115,7 +115,7 @@ final class Hubaga {
 	private function __construct() {
 
 		//Init the plugin after all plugins have loaded
-		add_action( 'plugins_loaded', array( $this, 'init' ) );
+		add_action( 'init', array( $this, 'init' ), 5 );
 
 		/**
 		 * Fires after Hubaga is loaded
@@ -174,14 +174,10 @@ final class Hubaga {
 		//Initiate the shortcodes class
 		$this->shortcodes = new H_Shortcodes();
 
-		// Register post statuses
-		add_action( 'init', array( $this, 'register_post_statuses' ) );
-
 		//Register post types after settings are loaded
-		add_action( 'hubaga_admin_init', array( $this, 'register_post_types' ), 3 );
-
-		// Set up localisation.
-		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
+		$this->register_post_types();
+		$this->register_post_statuses();
+		$this->load_plugin_textdomain();
 
 		//Enque necessary styles and scripts
 		add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ));
@@ -300,22 +296,9 @@ final class Hubaga {
 	protected function include_optional() {
 
 		//Coupons are optional
-		if( $this->is_enabled( 'coupons' )) {
+		if( hubaga_get_option( 'enable_coupons' ) ) {
 			require_once $this->includes_path . 'coupons.php';			
 		}
-	}
-
-	/**
-	 * Checks whether a given feature is enabled
-	 *
-	 *
-	 * @since 1.0.0
-	 * @access protected
-	 *
-	 */
-	protected function is_enabled( $feature, $id = 'hubaga' ) {
-
-		return false;
 	}
 
 	/**
@@ -496,4 +479,4 @@ final class Hubaga {
 endif;
 
 //And off we GO!!!!!!!!
-//Hubaga::instance();
+Hubaga::instance();
