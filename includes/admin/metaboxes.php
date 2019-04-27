@@ -54,9 +54,9 @@ class H_Metaboxes {
 	 * @access private
 	 */
 	private function setup_globals() {
-		$this->product_post_type 		= hubaga_get_product_post_type();
-		$this->coupon_post_type	 		= hubaga_get_coupon_post_type();
-		$this->order_post_type	 		= hubaga_get_order_post_type();
+		$this->product_post_type 		= hubaga()->product_post_type;
+		$this->coupon_post_type	 		= hubaga()->coupon_post_type;
+		$this->order_post_type	 		= hubaga()->order_post_type;
 		$this->orders_statuses	 		= hubaga_get_order_statuses();
 		$this->admin_dir				= hubaga_get_includes_path( 'admin' );
 	}

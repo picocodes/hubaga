@@ -54,17 +54,6 @@ function hubaga_add_option( $args, $id = 'hubaga' ){
 }
 
 /**
- * A helper function to check coupon post type
- *
- *
- * @since  1.0.4
- * @return bool
- */
-function hubaga_get_coupon_post_type(){
-	return hubaga()->coupon_post_type;
-}
-
-/**
  * A helper function to check whether this is a test store or not
  *
  *
