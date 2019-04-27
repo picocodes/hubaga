@@ -153,11 +153,11 @@ final class Hubaga {
 		//Load core files
 		$this->includes();
 
-		//Load optional files
-		$this->include_optional();
-
 		//Initiate the admin class
 		$this->admin = new H_Admin();
+
+		//Load optional files
+		$this->include_optional();
 
 		//Initiate the payments processor
 		$this->payments = hubaga_get_payment_processor();

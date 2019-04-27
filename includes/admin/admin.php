@@ -446,7 +446,7 @@ class H_Admin {
 
 		if ( hubaga()->basename  == $file ) {
 			$row_meta = array(
-				'support' 		=> '<a href="' . esc_url(  'https://hubaga.freshdesk.com/'  ) . '" aria-label="' . esc_attr__( 'Visit premium customer support', 'hubaga' ) . '">' . esc_html__( 'Premium support', 'hubaga' ) . '</a>',
+				'support' 		=> '<a href="' . esc_url(  'https://picocodes.freshdesk.com/'  ) . '" aria-label="' . esc_attr__( 'Visit premium customer support', 'hubaga' ) . '">' . esc_html__( 'Premium support', 'hubaga' ) . '</a>',
 			);
 
 			return array_merge( $links, $row_meta );
