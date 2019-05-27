@@ -390,21 +390,21 @@ class H_Order {
 	}
 
 	/**
-	 * Checks whether an order is refundable or not
-	 *
-	 * @return bool
-	 */
-	public function is_refundable() {
-		return hubaga_get_payment_processor()->is_refundable( $this );
-	}
-
-	/**
 	 * Refunds an order
 	 *
 	 * @return bool
 	 */
 	public function refund( $amount = null, $reason = '' ) {
-		return hubaga_get_payment_processor()->refund( $this, $amount );
+
+		do_action( 'hubaga_process_refund', $this, $amount, $reason, 10 );
+		
+		//Was the order successfully refunded?
+		$status = $wpdb->get_var( "SELECT post_status FROM {$wpdb->posts}" );
+		if( hubaga_get_refunded_order_status() == $status ){
+			return true;
+		}
+		return false;
+
 	}
 
 	/**
@@ -444,25 +444,6 @@ class H_Order {
 		}
 
 		return false;
-	}
-
-	/**
-	 * Checks whether an order is free or not
-	 *
-	 * @return bool
-	 */
-	public function is_free() {
-		return apply_filters( 'hubaga_is_order_free', !$this->is_payable(), $this );
-	}
-
-	/**
-	 * Checks whether an order is payable or not
-	 *
-	 * @return bool
-	 */
-	public function is_payable() {
-		$is_payable = ( $this->total ) > 0;
-		return apply_filters( 'hubaga_is_order_payable', $is_payable, $this );
 	}
 
 	/**

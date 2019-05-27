@@ -9,12 +9,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$currencies = array();
-if (function_exists('hubaga_get_currencies')) {
-	$currencies = hubaga_get_currencies();
+$currencies = hubaga_get_currencies();
+$gateways   = hubaga_get_registered_gateways();
+
+//Prepare the settings for gateways
+$gateway_settings = array();
+foreach( $gateways as $id => $info ){
+	
+	$title = esc_html( $info['title'] );
+	$desc  = esc_html( $info['description'] );
+	$gateway_settings["is_gateway_{$id}_active"] = array(
+		'type' 			=> 'switch',
+		'default' 		=> 1,
+		'class' 		=> 'filled-in',
+		'title' 		=> sprintf( esc_html__( 'Enable %s', 'hubaga' ), $title ),
+		'description' 	=> $desc,
+		'section' 		=> 'Gateways',
+	);
+
 }
 
-return array(
+return array_merge( array(
 
 	'account_page_id' 			=> array (
 		'type' 					=> 'select',
@@ -167,4 +182,71 @@ return array(
 		'section'  				=> 'Notifications',
 		'sub_section'  			=> 'Emails',
 	),
+	'paypal_title' => array(
+		'title'       => __( 'Title', 'hubaga' ),
+		'type'        => 'text',
+		'description' => __( 'The text to show on the checkout button.', 'hubaga' ),
+		'default'     => __( 'Pay Via PayPal', 'hubaga' ),
+		'section'	  => 'Gateways',
+		'sub_section' => 'PayPal',
+	),
+	'paypal_email' => array(
+		'title'       => __( 'PayPal email', 'hubaga' ),
+		'type'        => 'email',
+		'description' => __( 'The email address associated with your PayPal account.', 'hubaga' ),
+		'default'     => get_option( 'admin_email' ),
+		'placeholder' => 'you@youremail.com',
+		'section'	  => 'Gateways',
+		'sub_section' => 'PayPal',
+	),
+	'paypal_pdt_token' => array(
+		'title'       => __( 'PDT Token', 'hubaga' ),
+		'section'	  => 'Gateways',
+		'sub_section' => 'PayPal',
+		'type'        => 'text',
+		'description' => sprintf( 
+			__( 'This is required before you can process transactions via PayPal. %s Get your token. %s', 'hubaga' ),
+			'<a href="https://www.paypal.com/cgi-bin/customerprofileweb?cmd=_profile-website-payments">',
+			'</a>'),
+	),
+	'paypal_invoice_prefix' => array(
+		'title'       => __( 'Invoice prefix', 'hubaga' ),
+		'type'        => 'text',
+		'description' => __( 'Please enter a prefix for your invoice numbers. If you use your PayPal account for multiple stores ensure this prefix is unique as PayPal will not allow orders with the same invoice number.', 'hubaga' ),
+		'default'     => 'H-',
+		'section'	  => 'Gateways',
+		'sub_section' => 'PayPal',
+	),
+	'paypal_api_details' => array(
+		'title'       => __( 'API credentials', 'hubaga' ),
+		'type'        => 'title',
+		'section'	  => 'Gateways',
+		'sub_section' => 'PayPal',
+		'description' => sprintf( __( 'You will have to enter your api credentials before you can receive payments via PayPal. Learn how to access your <a href="%s">PayPal API Credentials</a>.', 'hubaga' ), 'https://developer.paypal.com/webapps/developer/docs/classic/api/apiCredentials/#creating-an-api-signature' ),
+	),
+	'paypal_api_username' => array(
+		'title'       => __( 'API username', 'hubaga' ),
+		'type'        => 'text',
+		'default'     => '',
+		'section'	  => 'Gateways',
+		'sub_section' => 'PayPal',
+		'placeholder' => __( 'jb-us-seller_api1.paypal.com', 'hubaga' ),
+	),
+	'paypal_api_password' => array(
+		'title'       => __( 'API password', 'hubaga' ),
+		'type'        => 'password',
+		'section'	  => 'Gateways',
+		'sub_section' => 'PayPal',
+		'default'     => '',
+		'placeholder' => __( 'WX4WTU3S8MY44S7F', 'hubaga' ),
+	),
+	'paypal_api_signature' => array(
+		'title'       => __( 'API signature', 'hubaga' ),
+		'type'        => 'text',
+		'default'     => '',
+		'section'	  => 'Gateways',
+		'sub_section' => 'PayPal',
+		'placeholder' => __( 'AFcWxV21C7fd0v3bYYYRCpSSRl31A7yDhhsPUU2XhtMoZXsWHFxu-RWy', 'hubaga' ),
+	),
+),$gateway_settings
 );

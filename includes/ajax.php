@@ -7,8 +7,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 add_action( 'wp_ajax_hubaga_get_checkout', 		    'hubaga_ajax_get_checkout' );
 add_action( 'wp_ajax_nopriv_hubaga_get_checkout',   'hubaga_ajax_get_checkout' );
-add_action( 'wp_ajax_hubaga_handle_checkout', 	    'hubaga_ajax_get_checkout' );
-add_action( 'wp_ajax_nopriv_hubaga_handle_checkout', 'hubaga_ajax_get_checkout' );
 
 //Returns the checkout form HTML
 function hubaga_ajax_get_checkout( ) {
@@ -17,7 +15,7 @@ function hubaga_ajax_get_checkout( ) {
 	$nonce = $_REQUEST['nonce'];
 
 	if (! wp_verify_nonce( $nonce, 'hubaga_nonce' ) ) {
-		wp_die ( __( 'There was a problem processing the request. Please refresh the page and try again.', 'hubaga' ) );
+		wp_die ( '<p>' . __( 'There was a problem processing the request. Please refresh the page and try again.', 'hubaga' ) . '</p>' );
 	}
 
 	echo hubaga()->template->get_checkout_html();

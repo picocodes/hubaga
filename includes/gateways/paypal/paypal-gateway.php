@@ -87,7 +87,7 @@ class H_PayPal_Gateway {
 			'hubaga_paypal_args',
 			array(
 				'cmd'           => '_xclick',
-				'notify_url'    => hubaga()->ajax_url . '?action=hubaga_validate_paypal_ipn',				
+				'notify_url'    => admin_url( 'admin-ajax.php?action=hubaga_validate_paypal_ipn' ),		
 				'amount'   		=> hubaga_get_order_total( $order ),		
 				'item_name'     => substr( $product->post_title, 0, 127 ),
 				'item_number'   => $product->ID,
@@ -504,24 +504,6 @@ class H_PayPal_Gateway {
 		$order->save();
 
 		return false;
-
-	}
-
-	/**
-	 * Gateway Settings
-	 * @param  object $order
-	 * @return array
-	 */
-	public function init_settings() {
-
-		$settings = include hubaga_get_includes_path() . 'checkout/gateways/paypal/settings-paypal.php';
-
-		foreach( $settings as $id => $details ) {
-			$details['sub_section'] = 'PayPal';
-			$details['section'] 	= 'Gateways';
-			$details['id'] 			= $id;
-			hubaga_elementa()->queue_control( $details );
-		}
 
 	}
 

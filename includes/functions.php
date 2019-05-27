@@ -242,17 +242,6 @@ function hubaga_get_user_agent(){
 }
 
 /**
- * A helper function to access the ajax url
- *
- *
- * @since  1.0.0
- * @return string
- */
-function hubaga_get_ajax_url(){
-	return hubaga()->ajax_url;
-}
-
-/**
  * A helper function to access the current notices
  *
  *
@@ -453,15 +442,6 @@ function hubaga_get_currency_symbols() {
 }
 
 /**
- * Returns the currency position
- *
- * @return string
- */
-function hubaga_get_currency_position() {
-	return hubaga_clean( hubaga_get_option( 'currency_position' )  );
-}
-
-/**
  * Format the price with a currency symbol.
  *
  * @param float $price
@@ -476,11 +456,11 @@ function hubaga_price( $price, $currency = '', $with_symbol = true ) {
 	$currency = hubaga_get_currency_symbol( $currency );
 	
 	$return = $price;
-	if ( 'right' == hubaga_get_currency_position() && $with_symbol ) {
+	if ( 'right' == hubaga_get_option( 'currency_position' ) && $with_symbol ) {
 		$return = $price . $currency;
 	}
 	
-	if ( 'left' == hubaga_get_currency_position() && $with_symbol ) {
+	if ( 'left' == hubaga_get_option( 'currency_position' ) && $with_symbol ) {
 		$return = $currency . $price;
 	}
 			

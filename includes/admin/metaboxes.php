@@ -470,13 +470,13 @@ class H_Metaboxes {
 
 		switch ($column) {
 			case "payment-date":
-				echo $order->payment_date;
+				echo esc_html( $order->payment_date );
 				break;
 			case "payment-method":
-				echo hubaga_get_gateway_title( $order->payment_method );
+				echo esc_html( $order->payment_method );
 				break;
 			case "customer-id":
-				echo "$customer_name ($customer_email)";
+				echo esc_html( "$customer_name ($customer_email)" );
 				break;
 			case "discount-total":
 				echo hubaga_price( $order->discount_total, $order->currency );
@@ -485,7 +485,7 @@ class H_Metaboxes {
 				echo hubaga_price( $order->total, $order->currency );
 				break;
 			case "order-number":
-				echo "#$order->ID";
+				echo esc_html( "#$order->ID" );
 				break;
 			case "product":
 				echo hubaga_get_product_title( $order->product );

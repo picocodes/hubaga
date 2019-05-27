@@ -9,8 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $gateways = array();
-foreach( hubaga_get_active_gateways() as $gateway ){
-	$gateways[$gateway] = esc_html( hubaga_get_gateway_title( $gateway ) );
+foreach( hubaga_get_active_gateways() as $id => $info ){
+	$gateways[$id] = esc_html( $info['title'] );
 }
 
 return array(

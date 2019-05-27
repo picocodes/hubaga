@@ -159,11 +159,13 @@ final class Hubaga {
 		//Load optional files
 		$this->include_optional();
 
-		//Initiate the payments processor
-		$this->payments = hubaga_get_payment_processor();
+		//Maybe upgrade the db
+		if( get_option( 'hubaga_db_version', '0' ) != $this->db_version ) {
+			$this->upgrade_db();
+		}
 
 		//Initiate the download handler
-		$this->downloader = new H_Download();
+		new H_Download();
 
 		//The template manager
 		$this->template = new H_Template();
@@ -226,9 +228,7 @@ final class Hubaga {
 
 		// Misc
 		$this->notices   		= new WP_Error(); //@see hubaga_add_notice
-		$this->ajax_url  		= admin_url( 'admin-ajax.php' );
 		$this->user_agent		= sprintf( 'Hubaga/%s Hubaga.com (WordPress/%s)', $this->version, $GLOBALS['wp_version'] );
-		$this->order_completed  = false; //sets whether or not an order was completed during this request
 
 	}
 
@@ -245,18 +245,19 @@ final class Hubaga {
 		//Core functions
         require_once $this->includes_path . 'functions.php';
 
-		//Products
+		//Product functions
 		require_once $this->includes_path . 'products.php';
 
-		//Orders
+		//Order functions
 		require_once $this->includes_path . 'orders.php';
 
-		//Checkout
-		require_once $this->includes_path . 'checkout/functions.php';
-		require_once $this->includes_path . 'checkout/abstract-payments-class.php';
-		require_once $this->includes_path . 'checkout/payments-class.php';
+		//Checkout functions
+		require_once $this->includes_path . 'checkout.php';
 
-		//Customers
+		//Default gateways
+		require_once $this->includes_path . 'gateways/test.php';
+
+		//Customer functions
 		require_once $this->includes_path . 'customers.php';
 
 		//Notifications
@@ -307,7 +308,7 @@ final class Hubaga {
 	 */
 	public function register_post_types() {
 
-		if ( ! is_blog_installed() || post_type_exists(  $this->product_post_type ) ) {
+		if ( ! is_blog_installed() || post_type_exists(  hubaga_get_product_post_type() ) ) {
 			return;
 		}
 
@@ -320,15 +321,15 @@ final class Hubaga {
 		do_action( 'hubaga_register_post_type' );
 
 		//Products
-		register_post_type( $this->product_post_type	, hubaga_get_product_post_type_details() );
+		register_post_type( hubaga_get_product_post_type()	, hubaga_get_product_post_type_details() );
 
 		//Coupons
 		if( hubaga_get_option( 'enable_coupons' ) ) {
-			register_post_type( $this->coupon_post_type	, hubaga_get_coupon_post_type_details() );
+			register_post_type( hubaga_get_coupon_post_type()	, hubaga_get_coupon_post_type_details() );
 		}
 
 		//Orders
-		register_post_type( $this->order_post_type	, hubaga_get_order_post_type_details() );
+		register_post_type( hubaga_get_order_post_type()	, hubaga_get_order_post_type_details() );
 
 		/**
 		 * Fires after custom post types are registered
@@ -372,13 +373,11 @@ final class Hubaga {
 	 *
 	 */
 	public function load_plugin_textdomain() {
-
 		 load_plugin_textdomain(
 			'hubaga',
 			false,
 			$this->plugin_path . 'languages/'
 		);
-
 	}
 
 	/**
@@ -389,8 +388,8 @@ final class Hubaga {
 
 		$nonce  = wp_create_nonce( 'hubaga_nonce' );
 		$params = array(
-			'ajaxurl' 				=> $this->ajax_url,
-			'pc_nonce'				=> $nonce,
+			'ajaxurl' 				=> admin_url( 'admin-ajax.php' ),
+			'nonce'					=> $nonce,
 			'empty_coupon'			=> __( 'Please provide a coupon code first.', 'hubaga' ),
 			'coupon_error'  		=> __( 'Unable to apply this coupon.', 'hubaga' ),
 			'checkout_url'			=> hubaga_get_checkout_url(),
@@ -398,33 +397,15 @@ final class Hubaga {
 		);
 
 		//Main Hubaga script
-		wp_register_script( 'hubaga_js', $this->plugin_url .  'assets/js/hubaga.js', array( 'jquery' ), '1.0.0', true );
+		$modified = filemtime($this->plugin_path .  'assets/js/hubaga.js');
+		wp_register_script( 'hubaga_js', $this->plugin_url .  'assets/js/hubaga.js', array( 'jquery' ), $modified, true );
 		wp_localize_script( 'hubaga_js', 'hubaga_params', $params );
 		wp_enqueue_script( 'hubaga_js' );
 
-		//Instacheck
-		wp_register_script( 'hubaga_instacheck', $this->plugin_url .  'assets/js/instacheck.js', array( 'jquery' ), '1.0.0', true );
-		wp_localize_script( 'hubaga_instacheck', 'instacheck_params', $params );
-
-		//Instacheck
-		if( hubaga_get_option( 'enable_instacheck' ) ) {
-			wp_enqueue_script( 'hubaga_instacheck' );
-		}
-
 		//Frontend css styles
-		wp_enqueue_style( 'hubaga_css', $this->plugin_url .  'assets/css/hubaga.css', array(), '1.0.0' );
+		$modified = filemtime($this->plugin_path .  'assets/css/hubaga.css');
+		wp_enqueue_style( 'hubaga_css', $this->plugin_url .  'assets/css/hubaga.css', array(), $modified );
 
-	}
-
-	/**
-	 * Checks whether or not the database should be upgraded
-	 *
-	 * @since 1.0.4
-	 * @access public
-	 *
-	 */
-	public function should_install() {
-		return get_option( 'hubaga_db_version', '0' ) == $this->db_version;
 	}
 
 	/**
@@ -434,9 +415,11 @@ final class Hubaga {
 	 * @access public
 	 *
 	 */
-	public function install() {
+	public function upgrade_db() {
 		require plugin_dir_path( __FILE__ ) . 'includes/install.php';
-		new H_Install;
+		$current = get_option( 'hubaga_db_version', '0' );
+		new H_Install( $current );
+		update_option( 'hubaga_db_version', $this->db_version );
 	}
 
 	/**

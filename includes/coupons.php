@@ -217,3 +217,30 @@ function hubaga_get_coupon_post_type(){
 function hubaga_get_coupon_post_type_menu_name(){
 	return apply_filters( 'hubaga_coupon_post_type_menu_name', hubaga_get_product_post_type_menu_name());
 }
+
+/**
+ * Applies a coupon to a product
+ */
+function hubaga_checkout_apply_coupon( $product_price, $product, $customer, $data ){
+	
+	//Maybe abort early
+	$total = $product_price['total'];
+	if( empty( $data['coupon_code'] ) || $total == 0 ) {
+		return $product_price;
+	}
+
+	$coupon_result = hubaga_apply_coupon( $data['coupon_code'], $total, $customer, $product );
+
+	//In case there was an error processing the coupon code
+	if ( hubaga_has_errors() ) {
+		hubaga_send_checkout_response( 'error', hubaga_get_errors_html() );
+	}
+
+	return array( 
+		'total' 	=> $coupon_result['order_total'],
+		'discount'  => $coupon_result['discount_total'],
+		'coupon'	=> hubaga_get_coupon( false, $data['coupon_code'] )->ID,
+	);
+	
+}
+add_filter( 'hubaga_checkout_order_total', 'hubaga_checkout_apply_coupon', 10, 4 );

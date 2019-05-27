@@ -276,7 +276,7 @@ class H_Report {
 			'cards'  			=> $this->cards(),
 			'revenueStreams'  	=> $this->revenue_streams(),
 			'currentStream'  	=> false,
-			'ajaxUrl'  			=> hubaga()->ajax_url,
+			'ajaxUrl'  			=> admin_url( 'admin-ajax.php' ),
 			'loading'  			=> false,
 			'filtersShowing'	=> false,
 			'currentCard'		=> 'Revenue',

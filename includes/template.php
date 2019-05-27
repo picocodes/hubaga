@@ -34,6 +34,7 @@ class H_Template {
 	 */
 	public function __construct() {
 		add_action( 'hubaga_init', array( $this, 'init' ), 5 );
+		add_action( 'admin_notices' , array( $this, 'sandbox_notices' ) );
 	}
 
 	/**
@@ -72,7 +73,7 @@ class H_Template {
 
 		//Checkout
 		add_action( 'hubaga_checkout_form', array( $this, 'print_checkout_title' ), 5 );
-		add_action( 'hubaga_checkout_form', array( $this, 'print_notices' ), 10 );
+		add_action( 'hubaga_checkout_form', array( $this, 'print_checkout_form_error_wrapper' ), 10 );
 		add_action( 'hubaga_checkout_form', array( $this, 'print_checkout_form_open' ), 15 );
 		add_action( 'hubaga_checkout_form', array( $this, 'print_checkout_fields' ), 20 );
 		add_action( 'hubaga_checkout_form', array( $this, 'print_gateway_select' ), 30 );
@@ -402,7 +403,7 @@ class H_Template {
 		// Wraps the checkout
 		$class = 'hubaga-checkout';
 		if ( wp_doing_ajax() ) {
-			$class = 'hubaga-instacheck';
+			$class = ' hubaga-instacheck';
 		}
 
 		echo "<div class='$class'>";
@@ -411,7 +412,7 @@ class H_Template {
 		 *
 		 * EVENTS
 		 * self::print_checkout_title 5
-		 * self::print_notices 10
+		 * self::print_checkout_form_error_wrapper 10
 		 * self::print_checkout_form_open 15
 		 * self::print_checkout_fields 20
 		 * self::print_gateway_select 25
@@ -442,8 +443,16 @@ class H_Template {
 	 * Prints the checkout title
 	 *
 	 */
+	public function  print_checkout_form_error_wrapper() {
+		echo '<div class="hubaga-error"></div>';
+	}
+
+	/**
+	 * Prints the checkout title
+	 *
+	 */
 	public function  print_checkout_form_open( $product ) {
-		echo "<form class='hubaga-checkout-form' method='post' action='$this->checkout_url'>";
+		echo "<div class='hubaga-form-wrapper'><form class='hubaga-checkout-form' method='post' action='$this->checkout_url'>";
 	}
 
 	/**
@@ -452,12 +461,25 @@ class H_Template {
 	 */
 	public function  print_checkout_fields( $product ) {
 
-		$fields = hubaga_get_checkout_fields();
-		foreach( $fields as $field => $args ){
-			if( isset ( $args['html'] ) ){
-				echo $args['html'];
-			}
+		$email = '';
+		$label= esc_html__( 'Email', 'hubaga' );
+
+		if ( is_user_logged_in() ) {
+			$user = wp_get_current_user();
+			$email = $user->user_email;
 		}
+
+		if ( isset( $_REQUEST['email'] ) ) {
+			$email = sanitize_email( $_REQUEST['email'] );
+		}
+	
+		echo "<label class='hubaga-label'>
+				<span>$label</span>
+				<input value='$email' name='email'  class='hubaga-field' type='email' placeholder='email@example.com' />
+			</label>
+		";
+
+		wp_nonce_field( 'hubaga_nonce_action', 'hubaga_nonce_field' );
 
 	}
 
@@ -477,21 +499,11 @@ class H_Template {
 			return;
 		}
 
-		$extra_html = '';
-
-		if (! wp_doing_ajax() ) {
-			$extra_html = "onchange='this.form.submit()'";
-		}
-
-		foreach( $gateways as $gateway ) {
-
-			$gateway = hubaga_get_gateway( $gateway );
-			$value	 = esc_attr( $gateway->meta['id'] );
-			$label	 = esc_html( $gateway->meta['button_text'] );
-			$class	 = "hubaga-gateway-radio hubaga-gateway-$value";
-
-			echo "<label class='$class' id='gateway_{$value}_label'> <input name='gateway' value='$value' id='gateway_$value' type='radio' $extra_html>$label </label>";
-
+		foreach( $gateways as $id => $details ) {
+			$value	 = esc_attr( $id );
+			$label	 = esc_html( $details['button_text'] );
+			$class	 = "hubaga-gateway-radio hubaga-gateway-$value ";
+			echo "<label class='$class' id='gateway_{$value}_label'> <input name='gateway' value='$value' id='gateway_$value' type='radio'>$label </label>";
 		}
 
 	}
@@ -586,7 +598,7 @@ class H_Template {
 			echo "<input type='hidden' name='fetchedBy' value='$fetcher'>";
 		}
 		wp_nonce_field( 'hubaga_checkout' );
-		echo "</form>";
+		echo "</form></div>";
 	}
 
 
@@ -825,6 +837,22 @@ class H_Template {
 				</div>
 			</div>
 		';
+	}
+
+	/**
+	 * Warn the user to disable sandbox when he is ready to start selling
+	 */
+	public function sandbox_notices(){
+
+		if(! hubaga_is_sandbox() ) {
+			return;
+		}
+
+		echo '<div class="notice notice-info is-dismissible" style=" padding: 1em; ">';
+			esc_html_e( 'You have activated sandbox mode. Do not forget to disable it when you are ready to start selling!', 'hubaga' );
+
+		echo '</div>';
+
 	}
 
 }

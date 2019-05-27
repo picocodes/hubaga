@@ -16,19 +16,29 @@ class H_Install {
 	/**
 	 * Install Hubaga.
 	 */
-	public function __construct() {
+	public function __construct( $current ) {
 		global $wpdb;
 
-		if ( ! is_blog_installed() || is_array(get_transient( 'hubaga_core_pages' )) ) {
+		if ( ! is_blog_installed() ) {
 			return;
 		}
-
-		$this->create_pages();
-		$this->create_options();
-		$this->create_roles();
+		
+		if(!$current){
+			$this->do_full_install();
+		}
 
 	}
 
+	/**
+	 * Does a full install of the plugin.
+	 */
+	private function do_full_install() {
+		if(! get_transient('_transient_hubaga_core_pages')){
+			$this->create_pages();
+		}
+		$this->create_options();
+		$this->create_roles();
+	}
 	/**
 	 * Create pages that the plugin relies on, storing page IDs in variables.
 	 */
@@ -81,15 +91,6 @@ class H_Install {
 				$to_save[$id] = $args['default'];
 			}
 		}
-
-		//Paypal settings
-		$paypal  = require plugin_dir_path( __FILE__ ) . 'checkout/gateways/paypal/settings-paypal.php';
-		foreach( $paypal as $id=>$args ){
-			if(isset($args['default'])){
-				$to_save[$id] = $args['default'];
-			}
-		}
-		$to_save['is_gateway_paypal_active'] = 1;
 
 		//Set shop pages
 		foreach (get_transient( 'hubaga_core_pages' ) as $page => $id) {
